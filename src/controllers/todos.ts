@@ -1,3 +1,4 @@
+import { notEqual } from "assert";
 import { Request, Response } from "express";
 
 const Todo = require('../models/todos');
@@ -7,7 +8,7 @@ const todosRouter = require('express').Router();
 //Get all todos
 todosRouter.get('/', (request: Request, response: Response) => {
   Todo.find({}).then((todos: object) => {
-    response.json(todos);
+    response.status(200).json(todos);
   })
   .catch((error: any) => {
     console.log(`Error: ${error}`);
@@ -16,10 +17,9 @@ todosRouter.get('/', (request: Request, response: Response) => {
 
 //Get specific todo by id
 todosRouter.get('/:id', (request: Request, response: Response) => {
-  console.log(request.params.id)
   Todo.findById(request.params.id).then((todo: object) => {
     if (todo) {
-      response.json(todo);
+      response.status(200).json(todo);
     } else {
       response.status(404).end();
     }
@@ -40,20 +40,39 @@ todosRouter.post('/', (request: Request, response: Response) => {
 
   todo.save()
     .then((savedTodo: object) => {
-      response.json(savedTodo)
+      response.status(201).json(savedTodo)
     })
-    .catch((error: any) => console.log(error))
+    .catch((error: any) =>{
+      response.status(400).end();
+    })
 });
 
 //Delete a todo
 todosRouter.delete('/:id', (request: Request, response: Response) => {
   Todo.findByIdAndRemove(request.params.id)
     .then((todo: any) => { //Should I send back the deleted todo?!
-      response.status(204);
+      response.status(204).end();
     })
-    .catch((error: any) => console.log(error))
+    .catch((error: any) => {
+      response.status(404).end();
+    })
 });
 
 //Update a todo;
+todosRouter.put('/:id', (request: Request, response: Response) => {
+  const body = request.body;
+
+  const todo = {
+    name: body.name,
+    details: body.details
+  }
+
+  Todo.findByIdAndUpdate(request.params.id, todo, {new: true}).then((updatedTodo: object) => {
+      response.status(200).json(updatedTodo)
+    })
+    .catch((error: any) => {
+      response.status(404).end();
+    });
+})
 
 module.exports = todosRouter;

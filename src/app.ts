@@ -1,12 +1,13 @@
 import { Error } from "mongoose";
 
+const config = require('./utils/config');
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 const cors = require('cors');
 const todosRouter = require('./controllers/todos');
 
-mongoose.connect('mongodb+srv://radu:$leipnir8O@cluster0.xckvvpi.mongodb.net/?retryWrites=true&w=majority')
+mongoose.connect(config.MONGODB_URI)
   .then(() => {
     console.log('Connected to DB');
   })
