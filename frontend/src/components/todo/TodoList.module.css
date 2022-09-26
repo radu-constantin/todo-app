@@ -1,0 +1,8 @@
+.todoList {
+  border: black 2px solid;
+  border-radius: 5px;
+  min-width: fit-content;
+  max-width: 30%;
+  padding: 10px;
+  margin: 5vh auto;
+}

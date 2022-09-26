@@ -1,0 +1,9 @@
+.navItem {
+  display: flex;
+  padding-left: 15px;
+  justify-content: center;
+}
+
+.navItem:last-child {
+  margin-left: auto;
+}

@@ -1,0 +1,21 @@
+li {
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.checkbox {
+  flex: 0 0 20%;
+}
+
+.itemName {
+  flex: 1 0 40%;
+}
+
+.iconContainer {
+  vertical-align: middle;
+  /* flex: 0 0 20%; */
+  margin-left: auto;
+}
