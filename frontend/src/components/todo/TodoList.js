@@ -5,7 +5,7 @@ import ListItem from './ListItem';
 function TodoList(props) {
   return (
     <div className={styles.todoList}>
-      {props.data.map(todo => <ListItem key={todo.id} item={todo}/>)}
+      {props.data.map(todo => <ListItem key={todo.id} item={todo} onDelete={props.onDelete} onCheck={props.onCheck}/>)}
     </div>
   )
 }

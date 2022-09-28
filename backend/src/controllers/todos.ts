@@ -1,4 +1,3 @@
-import { notEqual } from "assert";
 import { Request, Response } from "express";
 
 const Todo = require('../models/todos');
@@ -36,6 +35,7 @@ todosRouter.post('/', (request: Request, response: Response) => {
   const todo = new Todo({
     name: body.name,
     details: body.details,
+    done: body.done
   });
 
   todo.save()
@@ -64,7 +64,8 @@ todosRouter.put('/:id', (request: Request, response: Response) => {
 
   const todo = {
     name: body.name,
-    details: body.details
+    details: body.details,
+    done: body.done
   }
 
   Todo.findByIdAndUpdate(request.params.id, todo, {new: true}).then((updatedTodo: object) => {

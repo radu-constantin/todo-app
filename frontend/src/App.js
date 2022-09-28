@@ -1,38 +1,51 @@
 import './App.css';
+import {useState, useEffect} from 'react';
 
 import TodoList from './components/todo/TodoList';
 import Navbar from './components/nav/NavBar';
 import TodoForm from './components/todo/TodoForm';
 
+import todoService from './services/todos';
+
 function App() {
-  const DUMMY_DATA = [
-    {
-      id: 1,
-      name: "Clean car",
-      done: false,
-    },
-    {
-      id: 2,
-      name: "Study",
-      done: false,
-    },
-    {
-      id: 3,
-      name: "Feed the cat",
-      done: true,
-    },
-    {
-      id: 4,
-      name: "Longer text for testing.",
-      done: false,
+  const [todos, setTodos] = useState([]);
+
+  useEffect(() => {
+    todoService.getAll().then(response => {
+      setTodos(response.data);
+    })
+  }, []);
+
+  function addTodo(todo) {
+    const todoObj = {
+      name: todo,
     }
-  ]
+    todoService.create(todoObj).then(newTodo => {
+      setTodos(prevTodos => {
+        return [newTodo, ...prevTodos];
+      })
+    })
+  };
+
+  function deleteTodoHandler(id) {
+    todoService.deleteTodo(id);
+    setTodos(prevTodos => {
+      return prevTodos.filter(todo => todo.id != id);
+    });
+  };
+
+  function checkTodoHandler(id) {
+    todoService.checkTodo(id);
+    setTodos(prevTodos => {
+      return prevTodos.filter(todo => todo.id != id);
+    });
+  };
 
   return (
     <div>
       <Navbar />
-      <TodoForm />
-      <TodoList data={DUMMY_DATA}/>
+      <TodoForm addTodo={addTodo}/>
+      <TodoList data={todos} onDelete={deleteTodoHandler} onCheck={checkTodoHandler}/>
     </div>
   );
 }
