@@ -8,7 +8,7 @@ const initialTodos = [
   {name: "Clean car"},
   {name: "Clean house", details: "random cleaning"},
   {name: "Fix lights"}
-]
+];
 
 beforeEach(async() => {
   await Todo.deleteMany({});
@@ -17,7 +17,7 @@ beforeEach(async() => {
     let todoObj = new Todo(initialTodos[i]);
     await todoObj.save();
   }
-})
+});
 
 describe("Gets all todos", () => {
   test("all todos are returned", async() => {
@@ -36,12 +36,12 @@ describe("Gets a specific todo", () => {
   
     const specificTodo = await api.get(`/api/todos/${todo.id}`);
     expect(specificTodo.body).toEqual(todo);
-  })
+  });
   
   test("fails with status code 404 if todo is not found", async() => {
     await api.get(`/api/todos/63208c4995815d464da5b191`).expect(404);
   })
-})
+});
 
 describe("Add new todos", () => {
   test("can save a todo via post request", async() => {
@@ -63,7 +63,7 @@ describe("Add new todos", () => {
   
     await api.post('/api/todos').send(todo).expect(400);
   })
-})
+});
 
 describe("Todo can be deleted", () => {
   test("can delete a todo", async() => {
@@ -75,7 +75,7 @@ describe("Todo can be deleted", () => {
     const updatedTodos = await api.get('/api/todos');
     expect(updatedTodos.body).toHaveLength(initialTodos.length - 1);
   });
-})
+});
 
 
 test("can update a todo", async() => {

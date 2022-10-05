@@ -11,11 +11,15 @@ const todoSchema = new mongoose.Schema({
   done: {
     type: Boolean,
     default: false
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   }
 });
 
 todoSchema.set('toJSON', {
-  transform: (document: any, returnedObject: any) => {
+  transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString()
     delete returnedObject._id
     delete returnedObject.__v
