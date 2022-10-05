@@ -1,0 +1,13 @@
+.App {
+  text-align: center;
+}
+
+.loaderContainer {
+  /* border: 1px solid black; */
+  min-width: fit-content;
+  max-width: 30%;
+  padding: 0;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}

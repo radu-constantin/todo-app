@@ -14,6 +14,11 @@ li {
   flex: 1 0 40%;
 }
 
+.doneParagraph {
+  text-decoration: line-through;
+  color: gray;
+}
+
 .iconContainer {
   vertical-align: middle;
   /* flex: 0 0 20%; */

@@ -13,16 +13,21 @@ function create(newTodo) {
 };
 
 function deleteTodo(todoID) {
-  axios.delete(`${baseUrl}/${todoID}`);
+  return axios.delete(`${baseUrl}/${todoID}`);
 };
 
 function checkTodo(todoID) {
-  axios.put(`${baseUrl}/${todoID}`, {done: true});
-}
+  return axios.put(`${baseUrl}/${todoID}`, {done: true});
+};
+
+function uncheckTodo(todoID) {
+  return axios.put(`${baseUrl}/${todoID}`, {done: false}); 
+};
 
 export default {
   getAll: getAll,
   create: create,
   deleteTodo: deleteTodo,
-  checkTodo: checkTodo
+  checkTodo: checkTodo,
+  uncheckTodo: uncheckTodo
 }
