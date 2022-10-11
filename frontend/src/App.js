@@ -3,16 +3,21 @@ import { useState, useEffect } from 'react';
 import TodoList from './components/todo/TodoList';
 import Navbar from './components/nav/NavBar';
 import TodoForm from './components/todo/TodoForm';
+import Login from './components/login/Login';
+import Error from './components/shared/Error';
 
 import styles from './App.module.css'
 
 import { CircularProgress } from '@mui/material';
 
 import todoService from './services/todos';
+import loginService from './services/login';
 
 function App() {
   const [todos, setTodos] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     setLoading(true);
@@ -22,6 +27,14 @@ function App() {
     })
   }, []);
 
+  function handleAlert(errorObj) {
+    setErrorMessage(errorObj);
+    console.log(errorObj); //delete later
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000);
+  };
+
   function sortByStatus(a, b) {
     if (a.done && !b.done) {
       return 1;
@@ -30,7 +43,7 @@ function App() {
     } else {
       return 0;
     }
-  }
+  };
 
   async function addTodo(todo) {
     setLoading(true);
@@ -39,7 +52,7 @@ function App() {
     }
 
     let newTodo = await todoService.create(todoObj);
-    
+
     setTodos(prevTodos => {
       return [newTodo, ...prevTodos];
     })
@@ -75,12 +88,18 @@ function App() {
   };
 
   return (
-    <div>
+    <>
       <Navbar />
-      <TodoForm addTodo={addTodo} />
-      {loading && <div className={styles.loaderContainer}> <CircularProgress />  </div>}
-      <TodoList data={todos} onDelete={deleteTodoHandler} onCheck={checkTodoHandler} />
-    </div>
+      <main>
+        <Error message={errorMessage} />
+        {!user ? <Login onLogin={loginService.login} setUser={setUser} onError={handleAlert}/> :
+          <>
+            <TodoForm addTodo={addTodo} />
+            {loading && <div className={styles.loaderContainer}> <CircularProgress />  </div>}
+            <TodoList data={todos} onDelete={deleteTodoHandler} onCheck={checkTodoHandler} />
+          </>}
+      </main>
+    </>
   );
 }
 

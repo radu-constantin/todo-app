@@ -59,7 +59,5 @@ describe('when there is initially one user in db', () => {
 
     const usersAtEnd = await usersInDb();
     expect(usersAtEnd).toEqual(usersAtStart);
-  })
-
-
-})
+  });
+});
