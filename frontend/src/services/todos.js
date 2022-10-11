@@ -1,15 +1,23 @@
 import axios from 'axios';
-const baseUrl = 'http://localhost:3001/api/todos'
+const baseUrl = 'http://localhost:3001/api/todos';
+
+let token = null;
+
+function setToken(newToken) {
+  token = `bearer ${newToken}`;
+}
 
 function getAll() {
   return axios.get(baseUrl);
 }
 
-function create(newTodo) {
-  const request = axios.post(baseUrl, newTodo);
-  return request.then(response => {
-    return response.data;
-  });
+async function create(newTodo) {
+  const config = {
+    headers: { Authorization: token },
+  }
+
+  const response = await axios.post(baseUrl, newTodo, config);
+  return response.data;
 };
 
 function deleteTodo(todoID) {
@@ -17,11 +25,11 @@ function deleteTodo(todoID) {
 };
 
 function checkTodo(todoID) {
-  return axios.put(`${baseUrl}/${todoID}`, {done: true});
+  return axios.put(`${baseUrl}/${todoID}`, { done: true });
 };
 
 function uncheckTodo(todoID) {
-  return axios.put(`${baseUrl}/${todoID}`, {done: false}); 
+  return axios.put(`${baseUrl}/${todoID}`, { done: false });
 };
 
 export default {
@@ -29,5 +37,6 @@ export default {
   create: create,
   deleteTodo: deleteTodo,
   checkTodo: checkTodo,
-  uncheckTodo: uncheckTodo
+  uncheckTodo: uncheckTodo,
+  setToken: setToken
 }

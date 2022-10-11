@@ -6,9 +6,7 @@ import { AlertTitle } from '@mui/material';
 function Error({ message }) {
   return (
     <div className={`${message ? styles.visible : styles.hidden}`}>
-      <Alert severity="error">{message}
-        <AlertTitle>Error</AlertTitle>
-      </Alert>
+      <Alert severity="error">{message}</Alert>
     </div>
   )
 }

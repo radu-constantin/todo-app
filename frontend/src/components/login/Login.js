@@ -2,6 +2,8 @@ import { useState } from 'react';
 
 import styles from "./Login.module.css";
 
+import todoService from "../../services/todos";
+
 import { TextField } from '@mui/material';
 import { Button } from '@mui/material';
 
@@ -12,12 +14,13 @@ function Login(props) {
   async function loginHandler(event) {
     event.preventDefault() //Temporary
     try {
-      const user = await props.onLogin({username, password});
-      console.log(user);
+      const user = await props.onLogin({ username, password });
+
+      todoService.setToken(user.token);
       props.setUser(user);
       setUsername('');
       setPassword('');
-    } catch(exception) {
+    } catch (exception) {
       props.onError(exception.response.data.error);
     }
   }
@@ -29,7 +32,7 @@ function Login(props) {
           <TextField required fullWidth label='Username' type='text' name='username' id='username' value={username} onChange={({ target }) => setUsername(target.value)} />
         </div>
         <div className={styles.formItem}>
-          <TextField required fullWidth label='Password' type='password' name='password' id='password' value={password} onChange={({ target }) => setPassword(target.value)}/>
+          <TextField required fullWidth label='Password' type='password' name='password' id='password' value={password} onChange={({ target }) => setPassword(target.value)} />
         </div>
         <div className={styles.buttonContainer}>
           <Button type='submit' variant='contained'>Login</Button>
