@@ -69,16 +69,6 @@ todosRouter.post('/', async (request, response) => {
   } catch (error) {
     response.status(400).end();
   }
-
-  // todo.save()
-  //   .then((savedTodo) => {
-  //     user.todos = user.todos.concat(savedTodo._id);
-
-  //     response.status(201).json(savedTodo)
-  //   })
-  //   .catch((error) =>{
-  //     
-  //   })
 });
 
 //Delete a todo

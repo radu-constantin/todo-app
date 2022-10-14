@@ -7,3 +7,8 @@
 .navItem:last-child {
   margin-left: auto;
 }
+
+.navItem a {
+  text-decoration: none;
+  color: white;
+}

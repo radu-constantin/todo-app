@@ -5,6 +5,7 @@ import Navbar from './components/nav/NavBar';
 import TodoForm from './components/todo/TodoForm';
 import Login from './components/login/Login';
 import Error from './components/shared/Error';
+import Register from './components/registration/Register';
 
 import styles from './App.module.css'
 
@@ -12,6 +13,7 @@ import { CircularProgress } from '@mui/material';
 
 import todoService from './services/todos';
 import loginService from './services/login';
+import signupService from './services/signup';
 
 function App() {
   const [todos, setTodos] = useState([]);
@@ -26,6 +28,22 @@ function App() {
       setLoading(false);
     })
   }, []);
+
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedUser');
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON);
+      setUser(user);
+      todoService.setToken(user.token);
+    }
+  }, []);
+
+  function logout(event) {
+    event.preventDefault();
+    window.localStorage.removeItem('loggedUser');
+    setUser(null);
+    todoService.setToken(null);
+  };
 
   function handleAlert(errorObj) {
     setErrorMessage(errorObj);
@@ -89,15 +107,16 @@ function App() {
 
   return (
     <>
-      <Navbar />
+      <Navbar onLogout={logout} />
       <main>
         <Error message={errorMessage} />
-        {!user ? <Login onLogin={loginService.login} setUser={setUser} onError={handleAlert}/> :
+        <Register onSignup={signupService.registerUser} />
+        {/* {!user ? <Login onLogin={loginService.login} setUser={setUser} onError={handleAlert} /> :
           <>
             <TodoForm addTodo={addTodo} />
             {loading && <div className={styles.loaderContainer}> <CircularProgress />  </div>}
             <TodoList data={todos} onDelete={deleteTodoHandler} onCheck={checkTodoHandler} />
-          </>}
+          </>} */}
       </main>
     </>
   );

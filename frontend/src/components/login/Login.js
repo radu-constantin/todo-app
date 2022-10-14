@@ -12,9 +12,11 @@ function Login(props) {
   const [password, setPassword] = useState('');
 
   async function loginHandler(event) {
-    event.preventDefault() //Temporary
+    event.preventDefault();
     try {
       const user = await props.onLogin({ username, password });
+
+      window.localStorage.setItem('loggedUser', JSON.stringify(user));
 
       todoService.setToken(user.token);
       props.setUser(user);
