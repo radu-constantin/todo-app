@@ -40,7 +40,8 @@ describe("Gets a specific todo", () => {
   });
 
   test("Fails with status code 400 if the id of the request is invalid", async() => {
-    await api.get('/api/todos/xxy');
+    const response = await api.get('/api/todos/xxy');
+    expect(response.body).toEqual({error: 'Invalid todo ID!'})
   })
 });
 
@@ -62,8 +63,10 @@ describe("Add new todos", () => {
       details: "test"
     }
   
-    await api.post('/api/todos').send(todo).expect(400);
-  })
+    let response = await api.post('/api/todos').send(todo);
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({error: `The 'name' field is required!`})
+  });
 });
 
 describe("Todo can be deleted", () => {
@@ -77,7 +80,6 @@ describe("Todo can be deleted", () => {
     expect(updatedTodos.body).toHaveLength(initialTodos.length - 1);
   });
 });
-
 
 test("can update a todo", async() => {
   const update = {

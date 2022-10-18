@@ -40,7 +40,6 @@ todosRouter.post('/', async (request, response) => {
     const savedTodo = await todo.save();
     response.status(201).json(savedTodo);
   } catch (error) {
-    console.log(error.errors.path);
     if (error.name === "ValidationError") {
       response.status(400).json({error: `The '${error.errors.name.path}' field is required!`});
     }
@@ -48,14 +47,15 @@ todosRouter.post('/', async (request, response) => {
 });
 
 //Delete a todo
-todosRouter.delete('/:id', (request, response) => {
-  Todo.findByIdAndRemove(request.params.id)
-    .then((todo) => { //Should I send back the deleted todo?!
-      response.status(204).end();
-    })
-    .catch((error) => {
-      response.status(404).end();
-    })
+todosRouter.delete('/:id', async (request, response) => {
+  try {
+    const deletedTodo = await Todo.findByIdAndRemove(request.params.id);
+    console.log(deletedTodo);
+    response.status(204).json(deletedTodo);
+  }
+  catch (error) {
+    response.status(404).json(error);
+  }
 });
 
 //Update a todo;

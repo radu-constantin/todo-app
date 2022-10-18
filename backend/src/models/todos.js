@@ -12,7 +12,7 @@ const todoSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   }
-});
+}, { timestamps: true });
 
 todoSchema.set('toJSON', {
   transform: (document, returnedObject) => {
