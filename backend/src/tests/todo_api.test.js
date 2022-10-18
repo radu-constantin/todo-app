@@ -20,31 +20,32 @@ beforeEach(async() => {
 });
 
 describe("Gets all todos", () => {
-  test("all todos are returned", async() => {
+  test("All todos are returned", async() => {
     const response = await api.get('/api/todos');
-  
     expect(response.body).toHaveLength(initialTodos.length);
   });
 });
 
-
 describe("Gets a specific todo", () => {
-  test("return a specific todo", async() => {
+  test("Return a specific todo", async() => {
     const response = await api.get('/api/todos');
-  
     const todo = response.body[0];
-  
     const specificTodo = await api.get(`/api/todos/${todo.id}`);
+    
     expect(specificTodo.body).toEqual(todo);
   });
   
-  test("fails with status code 404 if todo is not found", async() => {
+  test("Fails with status code 404 if todo is not found", async() => {
     await api.get(`/api/todos/63208c4995815d464da5b191`).expect(404);
+  });
+
+  test("Fails with status code 400 if the id of the request is invalid", async() => {
+    await api.get('/api/todos/xxy');
   })
 });
 
 describe("Add new todos", () => {
-  test("can save a todo via post request", async() => {
+  test("Can save a todo via post request", async() => {
     const todo = {
       name: "test todo",
       details: "test"

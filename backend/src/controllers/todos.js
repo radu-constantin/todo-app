@@ -3,71 +3,47 @@ const User = require('../models/users');
 
 const todosRouter = require('express').Router();
 
-const jwt = require('jsonwebtoken');
-
-function getTokenFrom(request) {
-  const authorization = request.get('authorization');
-  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    return authorization.substring(7);
-  }
-
-  return null;
-}
-
 //Get all todos
 todosRouter.get('/', async (request, response) => {
-  const todos = await Todo.find({}).populate('user', { username: 1 });
+  const todos = await Todo.find({});
 
   response.json(todos);
-
-  // Todo.find({}).then((todos) => {
-  //   response.status(200).json(todos);
-  // })
-  // .catch((error) => {
-  //   console.log(`Error: ${error}`);
-  // })
 });
 
 //Get specific todo by id
-todosRouter.get('/:id', (request, response) => {
-  Todo.findById(request.params.id).then((todo) => {
+todosRouter.get('/:id', async (request, response, next) => {
+  try {
+    const todo = await Todo.findById(request.params.id);
     if (todo) {
       response.status(200).json(todo);
     } else {
       response.status(404).end();
     }
-  })
-    .catch((error) => {
-      console.log(`Error: ${error}`);
-    })
+  } catch (error) {
+    if (error.name === 'CastError') {
+      response.status(400).json({error: 'Invalid todo ID!'});
+    }
+  };
 });
 
 //Post a todo
 todosRouter.post('/', async (request, response) => {
   const body = request.body;
-  const token = getTokenFrom(request);
-  const decodedToken = jwt.verify(token, process.env.SECRET);
-
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: 'Token missing or invalid' })
-  }
-
-  const user = await User.findById(decodedToken.id);
 
   const todo = new Todo({
     name: body.name,
     details: body.details,
-    done: body.done,
-    user: user.id
+    done: body.done
   });
 
   try {
     const savedTodo = await todo.save();
-    user.todos = user.todos.concat(savedTodo.id);
-    await user.save();
     response.status(201).json(savedTodo);
   } catch (error) {
-    response.status(400).end();
+    console.log(error.errors.path);
+    if (error.name === "ValidationError") {
+      response.status(400).json({error: `The '${error.errors.name.path}' field is required!`});
+    }
   }
 });
 
