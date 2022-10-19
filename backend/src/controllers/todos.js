@@ -22,14 +22,15 @@ todosRouter.get('/:id', async (request, response, next) => {
       response.status(404).end();
     }
   } catch (error) {
-    if (error.name === 'CastError') {
-      response.status(400).json({ error: 'Invalid todo ID!' });
-    }
+    next(error);
+    // if (error.name === 'CastError') {
+    //   response.status(400).json({ error: 'Invalid todo ID!' });
+    // }
   };
 });
 
 //Post a todo
-todosRouter.post('/', async (request, response) => {
+todosRouter.post('/', async (request, response, next) => {
   const body = request.body;
 
   const todo = new Todo({
@@ -42,14 +43,15 @@ todosRouter.post('/', async (request, response) => {
     const savedTodo = await todo.save();
     response.status(201).json(savedTodo);
   } catch (error) {
-    if (error.name === "ValidationError") {
-      response.status(400).json({ error: `The '${error.errors.name.path}' field is required!` });
-    }
+    next(error);
+    // if (error.name === "ValidationError") {
+    //   response.status(400).json({ error: `The '${error.errors.name.path}' field is required!` });
+    // }
   }
 });
 
 //Delete a todo
-todosRouter.delete('/:id', async (request, response) => {
+todosRouter.delete('/:id', async (request, response, next) => {
   try {
     const deletedTodo = await Todo.findByIdAndRemove(request.params.id);
     if (deletedTodo === null) {
@@ -58,14 +60,15 @@ todosRouter.delete('/:id', async (request, response) => {
       response.status(204).json({ deletedTodo });
     }
   } catch (error) {
-    if (error.name === 'CastError') {
-      response.status(400).json({ error: 'Invalid todo ID!' });
-    }
+    next(error);
+    // if (error.name === 'CastError') {
+    //   response.status(400).json({ error: 'Invalid todo ID!' });
+    // }
   }
 });
 
 //Update a todo;
-todosRouter.put('/:id', async (request, response) => {
+todosRouter.put('/:id', async (request, response, next) => {
   const body = request.body;
 
   const todo = {
