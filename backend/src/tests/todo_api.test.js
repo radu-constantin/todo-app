@@ -79,21 +79,42 @@ describe("Todo can be deleted", () => {
     const updatedTodos = await api.get('/api/todos');
     expect(updatedTodos.body).toHaveLength(initialTodos.length - 1);
   });
+
+  test("404 status is returned if user tries to delete nonexisting todo", async () => {
+    await api.delete(`/api/todos/63208c4995815d464da5b191`).expect(404);
+  });
+
+  test("Fails with status code 400 if the id of the request is invalid", async() => {
+    const response = await api.delete('/api/todos/xxy');
+    expect(response.body).toEqual({error: 'Invalid todo ID!'})
+  });
 });
 
-test("can update a todo", async() => {
-  const update = {
-    name: 'Updated Todo'
-  }
+describe("Todos can be updated", () => {
+  test("can update a todo", async() => {
+    const update = {
+      name: 'Updated Todo'
+    }
+  
+    const response = await api.get('/api/todos');
+    const id = response.body[0].id;
+  
+    await api.put(`/api/todos/${id}`).send(update);
+  
+    const updatedTodo = await api.get(`/api/todos/${id}`);
+    expect(updatedTodo.body.name).toBe("Updated Todo");
+  });
 
-  const response = await api.get('/api/todos');
-  const id = response.body[0].id;
+  test("404 status is returned if user tries to update nonexisting todo", async () => {
+    await api.delete(`/api/todos/63208c4995815d464da5b191`).expect(404);
+  });
 
-  await api.put(`/api/todos/${id}`).send(update);
-
-  const updatedTodo = await api.get(`/api/todos/${id}`);
-  expect(updatedTodo.body.name).toBe("Updated Todo");
+  test("Fails with status code 400 if the id of the request is invalid", async() => {
+    const response = await api.delete('/api/todos/xxy');
+    expect(response.body).toEqual({error: 'Invalid todo ID!'})
+  });
 })
+
 
 afterAll(() => {
   mongoose.connection.close();

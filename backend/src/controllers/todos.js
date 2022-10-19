@@ -3,6 +3,8 @@ const User = require('../models/users');
 
 const todosRouter = require('express').Router();
 
+//!!!! Extract Error Handling to separate middleware!!!!
+
 //Get all todos
 todosRouter.get('/', async (request, response) => {
   const todos = await Todo.find({});
@@ -21,7 +23,7 @@ todosRouter.get('/:id', async (request, response, next) => {
     }
   } catch (error) {
     if (error.name === 'CastError') {
-      response.status(400).json({error: 'Invalid todo ID!'});
+      response.status(400).json({ error: 'Invalid todo ID!' });
     }
   };
 });
@@ -41,7 +43,7 @@ todosRouter.post('/', async (request, response) => {
     response.status(201).json(savedTodo);
   } catch (error) {
     if (error.name === "ValidationError") {
-      response.status(400).json({error: `The '${error.errors.name.path}' field is required!`});
+      response.status(400).json({ error: `The '${error.errors.name.path}' field is required!` });
     }
   }
 });
@@ -50,16 +52,20 @@ todosRouter.post('/', async (request, response) => {
 todosRouter.delete('/:id', async (request, response) => {
   try {
     const deletedTodo = await Todo.findByIdAndRemove(request.params.id);
-    console.log(deletedTodo);
-    response.status(204).json(deletedTodo);
-  }
-  catch (error) {
-    response.status(404).json(error);
+    if (deletedTodo === null) {
+      response.status(404).end();
+    } else {
+      response.status(204).json({ deletedTodo });
+    }
+  } catch (error) {
+    if (error.name === 'CastError') {
+      response.status(400).json({ error: 'Invalid todo ID!' });
+    }
   }
 });
 
 //Update a todo;
-todosRouter.put('/:id', (request, response) => {
+todosRouter.put('/:id', async (request, response) => {
   const body = request.body;
 
   const todo = {
@@ -68,12 +74,16 @@ todosRouter.put('/:id', (request, response) => {
     done: body.done
   }
 
-  Todo.findByIdAndUpdate(request.params.id, todo, { new: true }).then((updatedTodo) => {
-    response.status(200).json(updatedTodo);
-  })
-    .catch((error) => {
+  try {
+    const updatedTodo = await Todo.findByIdAndUpdate(request.params.id, todo, { new: true })
+    if (updatedTodo === null) {
       response.status(404).end();
-    });
-})
+    } else {
+      response.status(200).json(updatedTodo);
+    }
+  } catch (error) {
+    response.status(404).end();
+  };
+});
 
 module.exports = todosRouter;
