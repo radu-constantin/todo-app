@@ -115,7 +115,6 @@ describe("Todos can be updated", () => {
   });
 })
 
-
 afterAll(() => {
   mongoose.connection.close();
 });

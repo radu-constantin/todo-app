@@ -1,0 +1,13 @@
+main {
+  height: 100%;
+  width: 100%;
+}
+
+.loaderContainer {
+  min-width: fit-content;
+  max-width: 30%;
+  padding: 0;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}

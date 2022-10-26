@@ -4,14 +4,31 @@ import styles from './TodoForm.module.css';
 import { TextField } from '@mui/material';
 import { Button } from '@mui/material';
 
-function TodoForm({ addTodo }) {
+import todoService from '../../services/todos';
+
+function TodoForm({ setTodos }) {
   const [newTodo, setNewTodo] = useState('');
 
-  function handleTodoInput(event) {
+  async function addTodo(todo) {
+    // setLoading(true);
+    const todoObj = {
+      name: todo,
+    };
+
+    let newTodo = await todoService.create(todoObj);
+
+    setTodos(prevTodos => {
+      return [newTodo, ...prevTodos];
+    })
+
+    // setLoading(false);
+  };
+
+  function inputHandler(event) {
     setNewTodo(event.target.value);
   }
 
-  function handleSubmit(event) {
+  function submitHandler(event) {
     event.preventDefault();
     addTodo(newTodo);
     setNewTodo('');
@@ -19,9 +36,9 @@ function TodoForm({ addTodo }) {
 
   return (
     <div className={styles.formContainer}>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={submitHandler}>
         <div className={styles.formItem}>
-          <TextField required fullWidth label='Enter a new todo' type='text' name='name' id='name' onChange={handleTodoInput} value={newTodo} />
+          <TextField required fullWidth label='Enter a new todo' type='text' name='name' id='name' onChange={inputHandler} value={newTodo} />
         </div>
         <div className={styles.buttonContainer}>
           <Button type='submit' variant='contained'>Save todo</Button>

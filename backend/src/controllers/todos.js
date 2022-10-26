@@ -3,8 +3,6 @@ const User = require('../models/users');
 
 const todosRouter = require('express').Router();
 
-//!!!! Extract Error Handling to separate middleware!!!!
-
 //Get all todos
 todosRouter.get('/', async (request, response) => {
   const todos = await Todo.find({});
@@ -23,9 +21,6 @@ todosRouter.get('/:id', async (request, response, next) => {
     }
   } catch (error) {
     next(error);
-    // if (error.name === 'CastError') {
-    //   response.status(400).json({ error: 'Invalid todo ID!' });
-    // }
   };
 });
 
@@ -44,9 +39,6 @@ todosRouter.post('/', async (request, response, next) => {
     response.status(201).json(savedTodo);
   } catch (error) {
     next(error);
-    // if (error.name === "ValidationError") {
-    //   response.status(400).json({ error: `The '${error.errors.name.path}' field is required!` });
-    // }
   }
 });
 
@@ -61,9 +53,6 @@ todosRouter.delete('/:id', async (request, response, next) => {
     }
   } catch (error) {
     next(error);
-    // if (error.name === 'CastError') {
-    //   response.status(400).json({ error: 'Invalid todo ID!' });
-    // }
   }
 });
 
