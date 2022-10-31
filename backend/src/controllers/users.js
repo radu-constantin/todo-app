@@ -3,9 +3,8 @@ const usersRouter = require('express').Router();
 const User = require('../models/users');
 
 usersRouter.post('/', async (request, response) => {
-  const { username, name, email, password } = request.body;
+  const { username, password } = request.body;
 
-  //Users are not prevented from using the same e-mail at the moment.
   const existingUser = await User.findOne({ username });
   if (existingUser) {
     return response.status(400).json({
@@ -18,8 +17,6 @@ usersRouter.post('/', async (request, response) => {
 
   const user = new User({
     username,
-    name, 
-    email,
     passwordHash
   });
 
@@ -29,7 +26,7 @@ usersRouter.post('/', async (request, response) => {
 });
 
 usersRouter.get('/', async (request, response) => {
-  const users = await User.find({}).populate('todos');
+  const users = await User.find({}).populate('todos', {name: 1, done: 1, createdAt: 1, updatedAt: 1, id: 1});
   
   response.json(users);
 })

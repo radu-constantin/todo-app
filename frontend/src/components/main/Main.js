@@ -25,7 +25,7 @@ function Main(props) {
 
   return (
     <main>
-      <TodoForm setTodos={setTodos} />
+      <TodoForm setTodos={setTodos} setIsLoading={setIsLoading}/>
       {isLoading && <div className={styles.loaderContainer}><CircularProgress /></div>}
       <TodoList data={todos} setTodos={setTodos} />
     </main>

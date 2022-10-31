@@ -6,11 +6,11 @@ import { Button } from '@mui/material';
 
 import todoService from '../../services/todos';
 
-function TodoForm({ setTodos }) {
+function TodoForm({ setTodos, setIsLoading }) {
   const [newTodo, setNewTodo] = useState('');
 
   async function addTodo(todo) {
-    // setLoading(true);
+    setIsLoading(true);
     const todoObj = {
       name: todo,
     };
@@ -21,7 +21,7 @@ function TodoForm({ setTodos }) {
       return [newTodo, ...prevTodos];
     })
 
-    // setLoading(false);
+    setIsLoading(false);
   };
 
   function inputHandler(event) {

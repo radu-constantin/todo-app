@@ -3,12 +3,29 @@ const supertest = require('supertest');
 const app = require('../app');
 const api = supertest(app);
 const Todo = require('../models/todos');
+const User = require('../models/users');
 
 const initialTodos = [
   {name: "Clean car"},
-  {name: "Clean house", details: "random cleaning"},
+  {name: "Clean house"},
   {name: "Fix lights"}
 ];
+
+let loggedUser;
+
+beforeAll(async() => {
+  await User.deleteMany({});
+
+  const newUser = {
+    username: 'radu',
+    password: 'felix'
+  }
+
+  const testUser = await api.post('/api/users').send(newUser);
+
+  response = await api.post('/api/login').send(newUser);
+  loggedUser = response.body;
+});
 
 beforeEach(async() => {
   await Todo.deleteMany({});
@@ -49,10 +66,9 @@ describe("Add new todos", () => {
   test("Can save a todo via post request", async() => {
     const todo = {
       name: "test todo",
-      details: "test"
     }
   
-    await api.post('/api/todos').send(todo).expect(201);
+    await api.post('/api/todos').send(todo).set('Authorization', `bearer ${loggedUser.token}`).expect(201);
   
     const response = await api.get('/api/todos');
     expect(response.body).toHaveLength(initialTodos.length + 1);
@@ -63,7 +79,7 @@ describe("Add new todos", () => {
       details: "test"
     }
   
-    let response = await api.post('/api/todos').send(todo);
+    let response = await api.post('/api/todos').send(todo).set('Authorization', `bearer ${loggedUser.token}`);
     expect(response.status).toBe(400);
     expect(response.body).toEqual({error: `The 'name' field is required!`})
   });

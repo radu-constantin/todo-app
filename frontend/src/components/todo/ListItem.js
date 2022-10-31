@@ -19,15 +19,12 @@ function ListItem(props) {
 
   async function checkTodoHandler() {
     let updatedItem;
-
     if (item.done) {
       updatedItem = await todoService.uncheckTodo(itemID);
     } else {
       updatedItem = await todoService.checkTodo(itemID);
     }
-
     updatedItem = updatedItem.data;
-
     setTodos(prevTodos => {
       return helpers.sortTodos(prevTodos.map(todo => todo.id === itemID ? updatedItem : todo));
     });

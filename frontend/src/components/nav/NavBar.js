@@ -8,7 +8,6 @@ function NavBar(props) {
       <ul>
         <NavItem text='MY ACCOUNT'/>
         <NavItem text='LOGOUT' logoutHandler={props.onLogout}/>
-        <NavItem text='COMPLETED TODOS'/>
       </ul>
     </nav>
   )
