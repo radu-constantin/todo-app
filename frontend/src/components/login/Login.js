@@ -2,28 +2,27 @@ import { useState } from 'react';
 
 import styles from "./Login.module.css";
 
-import todoService from "../../services/todos";
+import loginService from "../../services/login";
 
 import { TextField } from '@mui/material';
 import { Button } from '@mui/material';
 
-function Login(props) {
+function Login({ setLoggedUser }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   async function loginHandler(event) {
     event.preventDefault();
     try {
-      const user = await props.onLogin({ username, password });
+      const user = await loginService.login({ username, password });
 
-      window.localStorage.setItem('loggedUser', JSON.stringify(user));
+      setLoggedUser(user);
 
-      todoService.setToken(user.token);
-      props.setUser(user);
       setUsername('');
       setPassword('');
-    } catch (exception) {
-      props.onError(exception.response.data.error);
+    } catch (error) {
+      // props.onError(exception.response.data.error);
+      console.log(error.response.data);
     }
   }
 
@@ -42,7 +41,6 @@ function Login(props) {
       </form>
     </div>
   )
-
 }
 
 export default Login;

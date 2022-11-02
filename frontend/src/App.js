@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import Main from './components/main/Main';
-import TodoList from './components/todo/TodoList';
 import Navbar from './components/nav/NavBar';
-import TodoForm from './components/todo/TodoForm';
 import Login from './components/login/Login';
 import Error from './components/shared/Error';
 import Register from './components/registration/Register';
@@ -12,15 +10,24 @@ import styles from './App.module.css'
 
 import { CircularProgress } from '@mui/material';
 
-
-import loginService from './services/login';
-import signupService from './services/signup';
-
 function App() {
+  function getToken() {
+    const tokenString = sessionStorage.getItem('token');
+    const userToken = JSON.parse(tokenString);
+    return userToken?.token;
+  }
+
+  function setToken(userToken) {
+    sessionStorage.setItem('token', JSON.stringify(userToken));
+    setLoggedUser(getToken());
+  }
+
+  const [loggedUser, setLoggedUser] = useState(getToken());
+  
   return (
         <>
           <Navbar />
-          <Main />
+          {loggedUser ? <Main /> : <Login setLoggedUser={setToken} />}
         </>
       );
 }
