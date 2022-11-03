@@ -13,8 +13,14 @@ function getTokenFrom(request) {
 }
 
 //Get all todos
-todosRouter.get('/', async (request, response) => {
-  const todos = await Todo.find({}).populate('user', { username: 1, id: 1 });
+todosRouter.get('/:user', async (request, response) => {
+  const username = request.params.user;
+
+  const query = {"user.username": username};
+
+  console.log(query)
+  
+  const todos = await Todo.find(query).populate('user', { username: 1, id: 1 });
 
   response.json(todos);
 });

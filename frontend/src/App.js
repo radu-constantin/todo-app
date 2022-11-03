@@ -14,7 +14,7 @@ function App() {
   function getToken() {
     const tokenString = sessionStorage.getItem('token');
     const userToken = JSON.parse(tokenString);
-    return userToken
+    return userToken;
   }
 
   function setToken(userToken) {

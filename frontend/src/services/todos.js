@@ -1,11 +1,9 @@
 import axios from 'axios';
 const baseUrl = 'http://localhost:3001/api/todos';
 
-function getAll() {
-  return axios.get(baseUrl);
+function getAll(user) {
+  return axios.get(`${baseUrl}/${user}`);
 }
-
-
 
 async function create(newTodo, token) {
   const config = {
