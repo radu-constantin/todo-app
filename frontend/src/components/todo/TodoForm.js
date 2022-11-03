@@ -6,7 +6,7 @@ import { Button } from '@mui/material';
 
 import todoService from '../../services/todos';
 
-function TodoForm({ setTodos, setIsLoading }) {
+function TodoForm({ setTodos, setIsLoading, getToken }) {
   const [newTodo, setNewTodo] = useState('');
 
   async function addTodo(todo) {
@@ -15,7 +15,9 @@ function TodoForm({ setTodos, setIsLoading }) {
       name: todo,
     };
 
-    let newTodo = await todoService.create(todoObj);
+    const token = getToken().token;
+
+    let newTodo = await todoService.create(todoObj, token);
 
     setTodos(prevTodos => {
       return [newTodo, ...prevTodos];

@@ -14,7 +14,7 @@ function App() {
   function getToken() {
     const tokenString = sessionStorage.getItem('token');
     const userToken = JSON.parse(tokenString);
-    return userToken?.token;
+    return userToken
   }
 
   function setToken(userToken) {
@@ -27,7 +27,7 @@ function App() {
   return (
         <>
           <Navbar />
-          {loggedUser ? <Main /> : <Login setLoggedUser={setToken} />}
+          {loggedUser ? <Main getToken={getToken}/> : <Login setLoggedUser={setToken} />}
         </>
       );
 }

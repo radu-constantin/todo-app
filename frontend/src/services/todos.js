@@ -5,8 +5,14 @@ function getAll() {
   return axios.get(baseUrl);
 }
 
-async function create(newTodo) {
-  const response = await axios.post(baseUrl, newTodo);
+
+
+async function create(newTodo, token) {
+  const config = {
+    headers: { Authorization: `bearer ${token}` },
+  }
+
+  const response = await axios.post(baseUrl, newTodo, config);
   return response.data;
 };
 

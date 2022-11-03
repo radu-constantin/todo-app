@@ -3,6 +3,7 @@ import { useState } from 'react';
 import styles from "./Login.module.css";
 
 import loginService from "../../services/login";
+import todoService from "../../services/todos";
 
 import { TextField } from '@mui/material';
 import { Button } from '@mui/material';
@@ -15,9 +16,8 @@ function Login({ setLoggedUser }) {
     event.preventDefault();
     try {
       const user = await loginService.login({ username, password });
-
       setLoggedUser(user);
-
+      // todoService.setToken(user.token);
       setUsername('');
       setPassword('');
     } catch (error) {
