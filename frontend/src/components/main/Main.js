@@ -15,7 +15,7 @@ function Main(props) {
   useEffect(() => {
     (async () => {
       setIsLoading(true);
-      const response = await todoService.getAll('odin');
+      const response = await todoService.getAll(props.userName);
       const todos = helpers.sortTodos(response.data);
       setTodos(todos);
       setIsLoading(false);

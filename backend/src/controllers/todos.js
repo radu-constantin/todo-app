@@ -16,13 +16,15 @@ function getTokenFrom(request) {
 todosRouter.get('/:user', async (request, response) => {
   const username = request.params.user;
 
-  const query = {"user.username": username};
+  const allTodos = await Todo.find({}).populate('user', { username: 1, id: 1 });
 
-  console.log(query)
-  
-  const todos = await Todo.find(query).populate('user', { username: 1, id: 1 });
+  const userTodos = allTodos.filter(todo => {
+    if (todo.user) {
+      return todo['user']['username'] === username;
+    }
+  })
 
-  response.json(todos);
+  response.json(userTodos);
 });
 
 //Get specific todo by id

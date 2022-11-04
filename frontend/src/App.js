@@ -27,7 +27,7 @@ function App() {
   return (
         <>
           <Navbar />
-          {loggedUser ? <Main getToken={getToken}/> : <Login setLoggedUser={setToken} />}
+          {loggedUser ? <Main getToken={getToken} userName={loggedUser.username}/> : <Login setLoggedUser={setToken} />}
         </>
       );
 }
