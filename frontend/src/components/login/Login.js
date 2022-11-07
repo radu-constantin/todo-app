@@ -3,12 +3,12 @@ import { useState } from 'react';
 import styles from "./Login.module.css";
 
 import loginService from "../../services/login";
-import todoService from "../../services/todos";
+import signUpService from "../../services/signup";
 
 import { TextField } from '@mui/material';
 import { Button } from '@mui/material';
 
-function Login({ setLoggedUser }) {
+function Login({ setLoggedUser, setMessage }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -17,12 +17,22 @@ function Login({ setLoggedUser }) {
     try {
       const user = await loginService.login({ username, password });
       setLoggedUser(user);
-      // todoService.setToken(user.token);
       setUsername('');
       setPassword('');
     } catch (error) {
-      // props.onError(exception.response.data.error);
-      console.log(error.response.data);
+      setMessage({text: `${error.response.data.error}`, status: 'error'});
+    }
+  };
+
+  async function registrationHandler(event) {
+    event.preventDefault();
+    try {
+      await signUpService.registerUser({ username, password });
+      setUsername('');
+      setPassword('');
+      setMessage({text: 'User succesfully registered', status: 'success'});
+    } catch (error) {
+      setMessage({text: `${error.response.data.error}`, status: 'error'});
     }
   }
 
@@ -35,9 +45,15 @@ function Login({ setLoggedUser }) {
         <div className={styles.formItem}>
           <TextField required fullWidth label='Password' type='password' name='password' id='password' value={password} onChange={({ target }) => setPassword(target.value)} />
         </div>
+        <div className={styles.buttonArea}>
         <div className={styles.buttonContainer}>
           <Button type='submit' variant='contained'>Login</Button>
         </div>
+        <div className={styles.buttonContainer}>
+          <Button type='button' variant='contained' onClick={registrationHandler}>Register</Button>
+        </div>
+        </div>
+        
       </form>
     </div>
   )

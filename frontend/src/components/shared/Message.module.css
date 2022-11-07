@@ -1,0 +1,16 @@
+.messageBox {
+  display: flex;
+}
+
+.alert {
+  width: 100%;
+  justify-content: center;
+}
+
+.hidden {
+  visibility: hidden;
+};
+
+.visible {
+  visibility: visible;
+}

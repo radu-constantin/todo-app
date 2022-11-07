@@ -15,6 +15,14 @@ General requirements:
   - Create login view;
   - Create registration view;
 
+  USER REGRISTRATION
+    - On the login page add a separate button for user registration; DONE
+    - User types in new username and password;
+      - if existing user - show error;
+      - if success - show success;
+    - Refresh the page.
+
+
   
 
 

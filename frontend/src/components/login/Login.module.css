@@ -1,8 +1,10 @@
 .formContainer {
   border: black 2px solid;
   border-radius: 5px;
+  width: 20%;
+  height: fit-content;
   min-width: fit-content;
-  max-width: 30%;
+  max-width: 40%;
   padding: 10px;
   margin: 5vh auto;
 }
@@ -14,9 +16,21 @@
   margin-top: 1vh;
 }
 
+.buttonArea {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
 .buttonContainer {
   width: fit-content; 
   margin: 0 auto;
   margin-top: 15px;
   align-items: center;
 } 
+
+@media screen and (max-width: 375px) and (max-height: 812px) {
+  .formContainer {
+    margin: auto;
+  }
+}

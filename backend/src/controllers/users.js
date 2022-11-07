@@ -5,10 +5,16 @@ const User = require('../models/users');
 usersRouter.post('/', async (request, response) => {
   const { username, password } = request.body;
 
+  if (username.length === 0 || password.length === 0) {
+    return response.status(400).json({
+      error: 'Fields cannot be empty!'
+    })
+  }
+
   const existingUser = await User.findOne({ username });
   if (existingUser) {
     return response.status(400).json({
-      error: 'username must be unique'
+      error: 'Username must be unique'
     })
   };
 

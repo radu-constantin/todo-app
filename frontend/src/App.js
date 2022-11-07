@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react';
 import Main from './components/main/Main';
 import Navbar from './components/nav/NavBar';
 import Login from './components/login/Login';
-import Error from './components/shared/Error';
+import Message from './components/shared/Message';
+import Wrapper from './components/shared/Wrapper';
 import Register from './components/registration/Register';
 
 import styles from './App.module.css'
@@ -22,14 +23,30 @@ function App() {
     setLoggedUser(getToken());
   }
 
+  function handleLogout() {
+    sessionStorage.removeItem('token');
+    setLoggedUser(null);
+  }
+
+  function setAndDisplayMessage(messageObj) {
+    setMessage(messageObj);
+    setTimeout(() => {
+      setMessage(null);
+    }, 5000);
+  }
+
   const [loggedUser, setLoggedUser] = useState(getToken());
-  
+  const [message, setMessage] = useState(null);
+
   return (
-        <>
-          <Navbar />
-          {loggedUser ? <Main getToken={getToken} userName={loggedUser.username}/> : <Login setLoggedUser={setToken} />}
-        </>
-      );
+    <>
+      <Navbar onLogout={handleLogout} />
+      <Wrapper>
+        {message && <Message text={message.text} status={message.status} />}
+        {loggedUser ? <Main getToken={getToken} userName={loggedUser.username} /> : <Login setLoggedUser={setToken} setMessage={setAndDisplayMessage} />}
+      </Wrapper>
+    </>
+  );
 }
 
 export default App;
