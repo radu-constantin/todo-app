@@ -1,12 +1,16 @@
 .todoList {
   border: black 2px solid;
   border-radius: 5px;
-  min-width: fit-content;
-  max-width: 30%;
-  padding: 10px;
+  width: 30%;
   margin: 5vh auto;
 }
 
 .paragraph {
   text-align: center;
-};
+}
+
+@media screen and (max-width: 375px) and (max-height: 812px) {
+  .todoList {
+    width: 70%;
+  }
+}

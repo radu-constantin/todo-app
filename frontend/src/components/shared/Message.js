@@ -4,8 +4,8 @@ import { Alert } from '@mui/material';
 
 function Message ({ text, status }) {
   return (
-    <div className={`${styles.messageBox} ${text ? styles.visible : styles.hidden}`}>
-      <Alert className={styles.alert} severity={status}>{text}</Alert>
+    <div className={`${styles.messageBox} ${status ? styles.visible : styles.hidden}`}>
+      {status && <Alert className={styles.alert} severity={status}>{text}</Alert>}
     </div>
   )
 }

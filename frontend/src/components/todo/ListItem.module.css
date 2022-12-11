@@ -6,6 +6,10 @@ li {
   align-items: center;
 }
 
+p {
+  overflow-wrap: anywhere;
+}
+
 .checkbox {
   flex: 0 0 20%;
 }

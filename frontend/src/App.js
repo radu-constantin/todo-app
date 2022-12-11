@@ -31,18 +31,21 @@ function App() {
   function setAndDisplayMessage(messageObj) {
     setMessage(messageObj);
     setTimeout(() => {
-      setMessage(null);
+      setMessage({text: null, status: null});
     }, 5000);
   }
 
   const [loggedUser, setLoggedUser] = useState(getToken());
-  const [message, setMessage] = useState(null);
+  const [message, setMessage] = useState({
+    text: null,
+    status: null
+  });
 
   return (
     <>
       <Navbar onLogout={handleLogout} />
       <Wrapper>
-        {message && <Message text={message.text} status={message.status} />}
+        <Message text={message.text} status={message.status} />
         {loggedUser ? <Main getToken={getToken} userName={loggedUser.username} /> : <Login setLoggedUser={setToken} setMessage={setAndDisplayMessage} />}
       </Wrapper>
     </>
