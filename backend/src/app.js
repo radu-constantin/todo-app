@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 const cors = require('cors');
+const static = require('serve-static')
 const todosRouter = require('./controllers/todos');
 const usersRouter = require('./controllers/users');
 const loginRouter = require('./controllers/login');
@@ -15,8 +16,10 @@ mongoose.connect(config.MONGODB_URI)
   .catch((error) => {
     console.log('Could not connect to MongoDB: ', error.message);
   });
+  
 
 app.use(cors());
+app.use(express.static('build'));
 app.use(express.json());
 app.use('/api/todos', todosRouter);
 app.use('/api/users', usersRouter);
