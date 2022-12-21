@@ -3,7 +3,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 const cors = require('cors');
-const static = require('serve-static')
 const todosRouter = require('./controllers/todos');
 const usersRouter = require('./controllers/users');
 const loginRouter = require('./controllers/login');
